@@ -4,7 +4,7 @@ import psycopg2
 import cx_Oracle
 import logging
 import requests
-from config3 import postgresDBcredentials, oracleDBcredentials, aisCredentials
+from config import postgresDBcredentials, oracleDBcredentials, aisCredentials
 import petl as etl
 
 
