@@ -8,9 +8,15 @@ from config import postgresDBcredentials, oracleDBcredentials, aisCredentials
 import petl as etl
 
 
+def logger():
+    logging.basicConfig(filename='just_PETL.log', format='%(asctime)s:%(levelname)s:%(lineno)d:%(message)s',
+                            datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
+                            
+                            
 # establish connection with postgres DB
 def connectToPostgres():
     try:
+        logging.info("connecting to postgres..")
         connection = psycopg2.connect(user=postgresDBcredentials['user'], password=postgresDBcredentials['password'] , database=postgresDBcredentials['database'])
         cursor = connection.cursor()
         logging.info("connected to postgres DB ")
@@ -48,17 +54,21 @@ def format_ewkt(coordinates):
 def connect_to_oracle():
     connection = None
     try:
+        logging.info("connecting to Oracle..")
         dsn = cx_Oracle.makedsn(oracleDBcredentials['host'], oracleDBcredentials['port'],
                                     service_name=oracleDBcredentials['serviceName'])
         connection = cx_Oracle.connect(
             oracleDBcredentials['user'], oracleDBcredentials['password'], dsn, encoding="UTF-8"
         )
+        logging.info("connected to Oracle.")
         return connection
     except cx_Oracle.Error as error:
         logging.ERROR(error)
 
 
+
 if __name__ == "__main__":
+    logger()
     # connect to oracle
     oracleConnection = connect_to_oracle()
     # extract from oracle into petl table
